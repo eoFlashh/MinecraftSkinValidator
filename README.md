@@ -13,4 +13,8 @@ Skin Validator is a Java-based tool designed to provide a simple and efficient a
 ## Requirements
 - Java 8 or higher
 - A valid `correct.png` reference file for comparison
+<<<<<<< HEAD
 - Input skin files in PNG format
+=======
+- Input skin files in PNG format
+>>>>>>> 14ebd3f01d4031cda10ea7e5cab2e63543e86a44
