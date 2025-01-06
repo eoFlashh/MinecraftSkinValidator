@@ -1,9 +1,6 @@
 package Models;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,42 +11,77 @@ public class Analise {
     public List<Pixel> wrongPixels(String path) throws IOException {
         List<Pixel> wrongpixels;
 
-        if (!path.endsWith("_a.png")) {
+        if (path.endsWith("_a.png")) {
             wrongpixels = convert.convertWrong("./correct_a.png");
-        } else if (path.endsWith("_s.png")) {
-            wrongpixels = convert.convertWrong("./correct_s.png");
         } else {
             wrongpixels = convert.convertWrong("./correct_s.png");
         }
         return wrongpixels;
     }
 
-    public List<Pixel> loadSkin(String path) throws IOException {
-        List<Pixel> skin = new ArrayList();
-        BufferedImage img = ImageIO.read(new File(path));
-        for (int y = 0; y < img.getHeight(); y++) {
-            for (int x = 0; x < img.getWidth(); x++) {
-                int locate = img.getRGB(x, y);
-                Color color = new Color(locate, true);
-                Pixel pixel = new Pixel(color, x, y);
-                if (pixel.color.getRGB() != 0) {
-                    skin.add(pixel);
-                }
-            }
+    public String identifyFacesTipe(String path) {
+        String resultPath = "correct_s.png";
+        if (path.endsWith("_a.png")) {
+            resultPath = "./correct_a.png";
         }
-        return skin;
+        return resultPath;
     }
 
-    public String compare(List<Pixel> wrongPixels, List<Pixel> skin) {
-        String result = "Valid skin";
+    public List<Pixel> loadSkin(String path) throws IOException {
+        return convert.convertSkin(path);
+    }
+
+    public List<String> verdict(List<Pixel> wrongPixels, List<Pixel> skin, List<Face> MAPSFACES) {
+        List<String> result = new ArrayList<>();
+        Faces faces = new Faces();
+
         for (int i = 0; i < skin.size(); i++) {
             Pixel pixel = skin.get(i);
-            if (wrongPixels.stream().anyMatch(p -> p.x == pixel.x && p.y == pixel.y)) {
-                result = "Invalid skin (wrong place)";
+            if (wrongPixels.stream().anyMatch(p -> p.pixelLocation().equals(pixel.pixelLocation()))) {
+                result.add("(wrong pixel place)");
             } else if (pixel.color.getAlpha() != 255 && pixel.color.getAlpha() != 0) {
-                result = "Invalid skin (wrong alpha)";
+                result.add("(wrong pixel alpha in " + faces.getFaceName(pixel.pixelLocation(), MAPSFACES) + ")");
             }
         }
+        List<String> faceResult = validateFace(MAPSFACES, skin);
+        result.addAll(faceResult);
+
+        if (result.isEmpty()) {
+            result.add("Valid skin");
+        }
         return result;
+    }
+
+    private List<String> validateFace(List<Face> mapFaces, List<Pixel> skin) {
+        List<String> veredict = new ArrayList<>();
+        for (Face face : mapFaces) {
+            List<String> faceLocation = face.getFaceLocations();
+            Color firstColor = null;
+            List<Pixel> facePixels = new ArrayList<>();
+
+            for (Pixel pixel : skin) {
+                if (faceLocation.contains(pixel.pixelLocation())) {
+                    facePixels.add(pixel);
+                    if (firstColor == null) {
+                        firstColor = pixel.color;
+                    }
+                }
+            }
+
+            List<String> missingLocations = new ArrayList<>(faceLocation);
+            for (Pixel pixel : facePixels) {
+                missingLocations.remove(pixel.pixelLocation());
+            }
+
+            if (!missingLocations.isEmpty() && !face.name.contains("2")) {
+                veredict.add("(Missing pixel in " + face.name + ")");
+            }
+
+            Color finalFirstColor = firstColor;
+            if ((facePixels.stream().allMatch(p -> p.color.equals(finalFirstColor)) && !face.name.contains("2"))) {
+                veredict.add("(Wrong face " + face.name + " single color face)");
+            }
+        }
+        return veredict;
     }
 }

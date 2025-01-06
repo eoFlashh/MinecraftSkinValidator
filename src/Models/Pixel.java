@@ -12,4 +12,10 @@ public class Pixel {
         this.x = x;
         this.y = y;
     }
+
+    public String pixelLocation(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(x).append(",").append(y);
+        return sb.toString();
+    }
 }

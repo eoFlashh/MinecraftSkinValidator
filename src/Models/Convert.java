@@ -19,10 +19,27 @@ public class Convert {
                 int locate = correct.getRGB(x, y);
                 Color color = new Color(locate, true);
                 Pixel pixel = new Pixel(color, x, y);
-                if (color.getRGB() == 0)
+                if (color.getAlpha() == 0){
                     wrongpixels.add(pixel);
+                }
             }
         }
+
         return wrongpixels;
+    }
+    public List<Pixel> convertSkin(String path) throws IOException {
+        List<Pixel> skin = new ArrayList();
+        BufferedImage img = ImageIO.read(new File(path));
+        for (int y = 0; y < img.getHeight(); y++) {
+            for (int x = 0; x < img.getWidth(); x++) {
+                int locate = img.getRGB(x, y);
+                Color color = new Color(locate, true);
+                Pixel pixel = new Pixel(color, x, y);
+                if (pixel.color.getRGB() != 0) {
+                    skin.add(pixel);
+                }
+            }
+        }
+        return skin;
     }
 }
