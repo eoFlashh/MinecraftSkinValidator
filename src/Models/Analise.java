@@ -13,7 +13,12 @@ public class Analise {
 
         if (path.endsWith("_a.png")) {
             wrongpixels = convert.convertWrong("./correct_a.png");
-        } else {
+        } else if (path.endsWith("_a32.png")) {
+            wrongpixels = convert.convertWrong("./correct_a32.png");
+        } else if (path.endsWith("_s32.png")) {
+            wrongpixels = convert.convertWrong("./correct_s32.png");
+        }
+        else{
             wrongpixels = convert.convertWrong("./correct_s.png");
         }
         return wrongpixels;
@@ -21,8 +26,13 @@ public class Analise {
 
     public String identifyFacesTipe(String path) {
         String resultPath = "correct_s.png";
+
         if (path.endsWith("_a.png")) {
             resultPath = "./correct_a.png";
+        } else if (path.endsWith("_s32.png")) {
+            resultPath = "./correct_s32.png";
+        } else if (path.endsWith("_a32.png")) {
+            resultPath = "./correct_a32.png";
         }
         return resultPath;
     }
@@ -38,7 +48,7 @@ public class Analise {
         for (int i = 0; i < skin.size(); i++) {
             Pixel pixel = skin.get(i);
             if (wrongPixels.stream().anyMatch(p -> p.pixelLocation().equals(pixel.pixelLocation()))) {
-                result.add("(wrong pixel place)");
+                result.add("(wrong pixel place)" + pixel.pixelLocation());
             } else if (pixel.color.getAlpha() != 255 && pixel.color.getAlpha() != 0) {
                 result.add("(wrong pixel alpha in " + faces.getFaceName(pixel.pixelLocation(), MAPSFACES) + ")");
             }
