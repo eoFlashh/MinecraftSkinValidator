@@ -1,6 +1,6 @@
 all valid# Skin Validator
 
-# This project is no longer maintained (the code gives me a headache). It still works like a charm, it’s just ugly.
+# This project is no longer maintained.
 
 Skin Validator is a Java-based tool designed to provide a simple and efficient alternative to the Bedrock Explorer **Skin Assistance** tool. This application checks the integrity and validity of skin files, ensuring that they meet specific criteria before use.
 
