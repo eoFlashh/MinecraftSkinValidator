@@ -1,4 +1,6 @@
-# Skin Validator
+all valid# Skin Validator
+
+# This project is no longer maintained (the code gives me a headache). It still works like a charm, it’s just ugly.
 
 Skin Validator is a Java-based tool designed to provide a simple and efficient alternative to the Bedrock Explorer **Skin Assistance** tool. This application checks the integrity and validity of skin files, ensuring that they meet specific criteria before use.
 
@@ -21,5 +23,18 @@ If the skin file does not have any of these endings, it will automatically be co
 - **Transparency Check**: Checks whether transparency is fully opaque or fully transparent, avoiding unexpected results.
 - **Face Validation**: Checks if each face has all pixels the same color.
 
+## Usage
+```powershell
+java -cp out\production\FSkinValidate skinvalidator.Main <file-or-folder> [--fix] [--recursive]
+```
+
+- `--fix`: creates a corrected copy prefixed with `✓`, fixing only forbidden pixels and partial alpha pixels.
+- `--recursive`: when the input is a folder, scans PNG files in subfolders too.
+
 ## Requirements
-- Java 8 or higher
+- Java 22 or higher
+
+## Build
+```powershell
+javac -encoding UTF-8 -d out\production\FSkinValidate <all .java files under src>
+```
