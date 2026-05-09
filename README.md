@@ -1,4 +1,4 @@
-all valid# Skin Validator
+# Skin Validator
 
 # This project is no longer maintained.
 
