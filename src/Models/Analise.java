@@ -17,8 +17,7 @@ public class Analise {
             wrongpixels = convert.convertWrong("./correct_a32.png");
         } else if (path.endsWith("_s32.png")) {
             wrongpixels = convert.convertWrong("./correct_s32.png");
-        }
-        else{
+        } else {
             wrongpixels = convert.convertWrong("./correct_s.png");
         }
         return wrongpixels;
@@ -50,7 +49,7 @@ public class Analise {
             if (wrongPixels.stream().anyMatch(p -> p.pixelLocation().equals(pixel.pixelLocation()))) {
                 result.add("(wrong pixel place)" + pixel.pixelLocation());
             } else if (pixel.color.getAlpha() != 255 && pixel.color.getAlpha() != 0) {
-                result.add("(wrong pixel alpha in " + faces.getFaceName(pixel.pixelLocation(), MAPSFACES) + ")");
+                result.add("(wrong pixel alpha in " + faces.getFaceName(pixel.pixelLocation(), MAPSFACES) + ")" + pixel.pixelLocation());
             }
         }
         List<String> faceResult = validateFace(MAPSFACES, skin);
